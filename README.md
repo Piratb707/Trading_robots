@@ -20,3 +20,6 @@ To get started with the Trading Robots Development repository, follow these step
 1. Clone the repository: git clone https://github.com/username/trading-robots.git
 2. Install the required dependencies: pip install -r requirements.txt
 3. Set up your environment and configuration files according to the provided guidelines.
+
+Donats!! :D
+https://widget.donatepay.ru/widgets/page/6d352d7e30e7a7e930922dc7bbbce215d1765d204e43b12a50f8f15520070033?widget_id=4952242&sum=200
