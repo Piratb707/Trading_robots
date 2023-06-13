@@ -1,4 +1,5 @@
 # Trading Robots Development #
+## WARNING! (THIS IS ALL FOR EDUCATIONAL PURPOSES ONLY!!( WARNING!) ##
 
 Welcome to the Trading Robots Development repository! This project focuses on the development of automated trading robots. 
 Trading robots, also known as algorithmic trading systems or bots, are computer programs that execute trades in financial markets based on pre-defined rules and algorithms.
