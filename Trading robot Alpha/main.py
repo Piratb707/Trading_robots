@@ -207,11 +207,6 @@ def strategy(buy_amt, SL=0.100, Target=1.01):
                     open_position = False  # Закрытие позиции
                     time.sleep(300)  # Пауза в 5 минут после закрытия сделки
 
-                # Проверка времени открытия ордера
-                #elapsed_time = datetime.now() - last_open_time
-                #if elapsed_time.total_seconds() > 3600:  # Если прошло более часа
-                 #   print("Order not opened within 1 hour. Restarting...")
-                  #  break
 
         else:
             print(time.strftime("|%H.%M.%S|"), "Searching...")
