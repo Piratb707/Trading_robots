@@ -4,22 +4,26 @@ import pandas as pd
 import time
 from datetime import datetime, timedelta
 
+# Create a Binance API client instance
 # Создаем экземпляр клиента Binance API
 client = Client(keys.api_key, keys.api_secret)
 
+# Get Binance server time
 # Получение времени сервера Binance
 server_time = client.get_server_time()
 server_timestamp = server_time['serverTime']
 
+# Variables for tracking transaction statistics
 # Переменные для отслеживания статистики сделок
-total_deals = 0  # Счетчик суммы сделок
-profit = 0  # Переменная для отслеживания заработка
-loss = 0  # Переменная для отслеживания потерь
-successful_deals = 0  # Счетчик успешных сделок
-unsuccessful_deals = 0  # Счетчик неуспешных сделок
-open_position = False  # Флаг, указывающий, открыта ли позиция
-last_open_time = None  # Время открытия последнего ордера
+total_deals = 0  # Счетчик суммы сделок | Transaction amount counter
+profit = 0  # Переменная для отслеживания заработка | Variable for tracking earnings
+loss = 0  # Переменная для отслеживания потерь | Variable for loss tracking
+successful_deals = 0  # Счетчик успешных сделок | Successful transactions counter
+unsuccessful_deals = 0  # Счетчик неуспешных сделок | Unsuccessful transactions counter
+open_position = False  # Флаг, указывающий, открыта ли позиция | Flag indicating whether the position is open or not
+last_open_time = None  # Время открытия последнего ордера | Time of opening of the last order
 
+# Decoder for API error handling
 # Декоратор для обработки ошибок API
 def handle_api_error(func):
     """
@@ -47,6 +51,7 @@ def handle_api_error(func):
                 return func(*args, **kwargs)
     return wrapper
 
+# Function for attempting to close an order
 # Функция для попытки закрытия ордера
 def retry_close_order(*args, **kwargs):
     """
@@ -57,8 +62,8 @@ def retry_close_order(*args, **kwargs):
         **kwargs: Именованные аргументы.
 
     """
-    max_attempts = 3  # Максимальное количество попыток закрытия ордера
-    attempt = 1  # Текущая попытка
+    max_attempts = 3  # Максимальное количество попыток закрытия ордера | Maximum number of attempts to close an order
+    attempt = 1  # Текущая попытка |  Current attempt
 
     while attempt <= max_attempts:
         try:
@@ -73,6 +78,7 @@ def retry_close_order(*args, **kwargs):
     if attempt > max_attempts:
         print("Max attempts reached. Skipping the order closing.")
 
+# Function to get the most successful currency pair
 # Функция для получения самой успешной валютной пары
 @handle_api_error
 def top_coin():
