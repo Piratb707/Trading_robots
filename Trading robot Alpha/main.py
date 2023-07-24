@@ -119,6 +119,31 @@ def last_data(symbol, interval, lookback):
     frame = frame.astype(float)
     return frame
 
+# Function to close an open position
+@handle_api_error
+def close_position(asset):
+    """
+    Closes the open position for the given asset.
+
+    Args:
+        asset: Symbol of the currency pair to close the position.
+
+    """
+    global open_position
+
+    try:
+        positions = client.get_account()['positions']
+        for position in positions:
+            if position['symbol'] == asset:
+                if float(position['positionAmt']) > 0:
+                    qty = float(position['positionAmt'])
+                    order = client.create_order(symbol=asset, side='SELL', type='MARKET', quantity=qty)
+                    print("Closing position:", order)
+                    open_position = False
+                    break
+    except Exception as e:
+        print(f"Error occurred during closing the position: {e}")
+
 # Основная стратегия
 @handle_api_error
 def strategy(buy_amt, SL=0.100, Target=1.01):
@@ -170,6 +195,10 @@ def strategy(buy_amt, SL=0.100, Target=1.01):
                 print(time.strftime("|%H.%M.%S|"), f"{asset} Price: {df.Close.iloc[-1]}, Target: {target_price}")
                 time.sleep(5)
 
+            # Close the open position before opening a new one
+            if open_position:
+                close_position(asset)
+
             order = client.create_order(symbol=asset, side='BUY', type='MARKET', quantity=qty)
             print(order)
             buyprice = float(order['fills'][0]['price'])
@@ -206,7 +235,6 @@ def strategy(buy_amt, SL=0.100, Target=1.01):
 
                     open_position = False  # Закрытие позиции
                     time.sleep(300)  # Пауза в 5 минут после закрытия сделки
-
 
         else:
             print(time.strftime("|%H.%M.%S|"), "Searching...")
